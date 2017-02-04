@@ -1,3 +1,6 @@
+import Player from './actors/player';
+import Explosion from './actors/explosion';
+
 export default class Game extends Phaser.State {
   constructor() {
     super();
@@ -14,7 +17,8 @@ export default class Game extends Phaser.State {
   create() {
     this.stage.backgroundColor = 0x282c34;
 
-    this.addStartKitLabel();
+    this.addPlayers();
+    this.addCursor();
   }
 
   update() {
@@ -25,12 +29,36 @@ export default class Game extends Phaser.State {
 
   }
 
-  addStartKitLabel() {
-    const x = 15;
-    const y = 15;
+  handleClick(deviceButton) {
+    const { event } = deviceButton;
+    let explosion = this.addExplosion(event.offsetX, event.offsetY);
 
-    this.add.text(x, y, 'Starter Kit 2.0.0', {
-      fill: 'white', font: '26px Open Sans'
-    });
+    explosion.animate();
+  }
+
+  addExplosion(x = 300, y = 300) {
+    let explosion = new Explosion(this.game, x, y);
+
+    this.add.existing(explosion);
+
+    return explosion;
+  }
+
+  addPlayers() {
+    let p1 = new Player(this, 50, 50);
+    let p2 = new Player(this.game, this.game.width - 50 - p1.width, 50);
+
+    p1.addIpulse(10, 10);
+    p1.addIpulse(10, 10);
+    p1.addIpulse(10, 10);
+
+    this.add.existing(p1);
+    this.add.existing(p2);
+  }
+
+  addCursor() {
+    const { game: { input } } = this;
+
+    input.activePointer.leftButton.onDown.add(this.handleClick, this);
   }
 }
