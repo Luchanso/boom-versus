@@ -1,5 +1,5 @@
 export default class Explosion extends Phaser.Sprite {
-  constructor(game, x, y) {
+  constructor(game, x = 0, y = 0) {
     const radius = 100;
     const bitmap = game.add.bitmapData(radius * 2, radius * 2);
     const { ctx } = bitmap;
@@ -20,30 +20,40 @@ export default class Explosion extends Phaser.Sprite {
     this.alpha = 0.2;
   }
 
+  reset(x, y) {
+    super.reset(x, y);
+
+    const greenComponent = 175 + this.game.rnd.between(-50, 0);
+    this.tint = Phaser.Color.getColor(255, greenComponent, 87);
+  }
+
   animate() {
     const { game } = this;
-    const tweenTime = 250 + game.rnd.between(-50, 200);
+    const timeCreate = 800 + game.rnd.between(-50, 200);
+    const timeWave = 500 + game.rnd.between(-50, 50);
     const maxSize = 400 + game.rnd.between(-100, 100);
+    const createSize = 50;
+    const waveSize = 800;
 
     this.width = 10;
     this.height = 10;
-    this.alpha = 0.1;
+    this.alpha = 0;
 
     game.add.tween(this)
       .to({
-        width: maxSize,
-        height: maxSize,
-        alpha: 0.5,
-      }, tweenTime)
+        width: createSize,
+        height: createSize,
+        alpha: 0.8
+      }, timeCreate, Phaser.Easing.Cubic.Out)
       .to({
-        width: 0,
-        height: 0,
+        width: waveSize,
+        height: waveSize,
         alpha: 0,
-      }, tweenTime)
+      }, timeWave)
       .start()
       .onComplete
       .add(() => {
-        this.destroy();
+        this.kill();
       });
   }
 }
