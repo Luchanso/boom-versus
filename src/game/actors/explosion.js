@@ -3,7 +3,7 @@ export default class Explosion extends Phaser.Sprite {
     const radius = 100;
     const bitmap = game.add.bitmapData(radius * 2, radius * 2);
     const { ctx } = bitmap;
-    const greenComponent = 200 + game.rnd.between(-50, 0);
+    const greenComponent = 175 + game.rnd.between(-50, 0);
 
     ctx.beginPath();
     ctx.fillStyle = 'white';
