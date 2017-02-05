@@ -4,11 +4,30 @@ export default class Loader extends Phaser.State {
   }
 
   preload() {
-
+    this.preloadFlash();
+    this.preloadExpolosion();
   }
 
   create() {
     this.state.start('Game');
+  }
+
+  preloadExpolosion() {
+    const basePath = 'assets/sprites/Explosion';
+    const baseName = 'explosion';
+
+    for (let i = 0; i < 9; i++) {
+      this.load.image(`${baseName}0${i}.png`, `${basePath}/${baseName}0${i}.png`);
+    }
+  }
+
+  preloadFlash() {
+    const basePath = 'assets/sprites/Flash';
+    const baseName = 'flash';
+
+    for (let i = 0; i < 9; i++) {
+      this.load.image(`${baseName}0${i}.png`, `${basePath}/${baseName}0${i}.png`);
+    }
   }
 
   addProgressLabel() {
