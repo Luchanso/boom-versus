@@ -17,6 +17,7 @@ export default class Game extends Phaser.State {
   create() {
     this.stage.backgroundColor = 0x282c34;
 
+    this.addExplosions();
     this.addPlayers();
     this.addCursor();
     this.addAnimationTimer();
@@ -27,14 +28,40 @@ export default class Game extends Phaser.State {
   }
 
   render() {
+    const { debug } = this.game;
 
+    debug.text(
+      'Explosions in memory: ' + this.explosions.length,
+      25,
+      25,
+      'rgb(79, 254, 117)'
+    );
   }
 
   handleClick(deviceButton) {
     const { event } = deviceButton;
-    let explosion = this.addExplosion(event.offsetX, event.offsetY);
 
+    let explosion = this.explosions.getFirstDead();
+
+    if (!explosion) {
+      explosion = new Explosion(this.game);
+      this.explosions.add(explosion);
+    }
+
+    explosion.reset(event.offsetX, event.offsetY);
     explosion.animate();
+  }
+
+  addExplosions() {
+    const explosionLength = 30;
+
+    this.explosions = this.add.group();
+
+    for (let i = 0; i < explosionLength; i++) {
+      let explosion = new Explosion(this.game);
+      explosion.kill();
+      this.explosions.add(explosion);
+    }
   }
 
   addExplosion(x = 300, y = 300) {
