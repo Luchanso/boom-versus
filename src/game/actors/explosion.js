@@ -34,8 +34,8 @@ export default class Explosion extends Phaser.Sprite {
 
     game.add.tween(this)
       .to({
-        width: fisrtSize,
-        height: fisrtSize,
+        width: createSize,
+        height: createSize,
         alpha: 0.8
       }, tweenTime, Phaser.Easing.Cubic.Out)
       .to({
