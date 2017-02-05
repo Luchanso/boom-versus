@@ -43,7 +43,7 @@ export default class Player extends Phaser.Sprite {
     this.y += this.velocityY;
   }
 
-  addIpulse(x, y) {
+  addImpulse(x, y) {
     this.velocityX += x;
     this.velocityY += y;
   }

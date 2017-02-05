@@ -20,7 +20,6 @@ export default class Game extends Phaser.State {
     this.addExplosions();
     this.addPlayers();
     this.addCursor();
-    this.addAnimationTimer();
   }
 
   update() {
@@ -38,6 +37,35 @@ export default class Game extends Phaser.State {
     );
   }
 
+  addImpulse(x, y) {
+    let force1 = this.calculateForceForPlayer(x, y, this.p1);
+    let force2 = this.calculateForceForPlayer(x, y, this.p2);
+
+    this.p1.addImpulse(force1.x, force1.y);
+    this.p2.addImpulse(force2.x, force2.y);
+  }
+
+  calculateForceForPlayer(x, y, player) {
+    const { math } = this.game;
+    const distance = math.distance(x, y, player.x, player.y);
+    const baseDistance = 300;
+    const maxF = 10;
+    let F = 0;
+
+    if (distance < baseDistance) {
+      F = maxF;
+    } else {
+      F = (baseDistance / distance * maxF);
+    }
+
+    const angle = math.angleBetween(x, y, player.x, player.y);
+
+    let lx = Math.cos(angle) * F;
+    let ly = Math.sin(angle) * F;
+
+    return new Phaser.Point(lx, ly);
+  }
+
   handleClick(deviceButton) {
     const { event } = deviceButton;
 
@@ -50,6 +78,8 @@ export default class Game extends Phaser.State {
 
     explosion.reset(event.offsetX, event.offsetY);
     explosion.animate();
+
+    this.addImpulse(explosion.x, explosion.y);
   }
 
   addExplosions() {
@@ -74,7 +104,7 @@ export default class Game extends Phaser.State {
 
   addPlayers() {
     this.p1 = new Player(this, 50, 50);
-    this.p2 = new Player(this.game, this.game.width - 50 - this.p1.width, 50);
+    this.p2 = new Player(this.game, 300, 300);
 
     this.add.existing(this.p1);
     this.add.existing(this.p2);
@@ -85,30 +115,4 @@ export default class Game extends Phaser.State {
 
     input.activePointer.leftButton.onDown.add(this.handleClick, this);
   }
-
-  addAnimationTimer() {
-    const ANIMATION_DELAY = 1000;
-    let animationTimer = this.time.create(false);
-
-    animationTimer.loop(ANIMATION_DELAY, this.tickTimerAnimation, this);
-    animationTimer.start();
-
-    this.animationTimer = animationTimer;
-
-    return animationTimer;
-  }
-
-  tickTimerAnimation() {
-    const force = 20;
-
-    if (tempFlag) {
-      this.p1.addIpulse(force, force);
-    } else {
-      this.p1.addIpulse(-force, -force);
-    }
-
-    tempFlag = !tempFlag;
-  }
 }
-
-let tempFlag = true;
