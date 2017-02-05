@@ -1,5 +1,5 @@
 export default class Explosion extends Phaser.Sprite {
-  constructor(game, x, y) {
+  constructor(game, x = 0, y = 0) {
     const radius = 100;
     const bitmap = game.add.bitmapData(radius * 2, radius * 2);
     const { ctx } = bitmap;
@@ -37,7 +37,7 @@ export default class Explosion extends Phaser.Sprite {
         width: createSize,
         height: createSize,
         alpha: 0.8
-      }, tweenTime, Phaser.Easing.Cubic.Out)
+      }, timeCreate, Phaser.Easing.Cubic.Out)
       .to({
         width: waveSize,
         height: waveSize,
