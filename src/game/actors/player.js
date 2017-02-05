@@ -13,7 +13,7 @@ export default class Player extends Phaser.Sprite {
 
     this.velocityX = 0;
     this.velocityY = 0;
-    this.reduceVelociteSpeed = 1;
+    this.reduceVelociteSpeed = 0.5;
   }
 
   update() {

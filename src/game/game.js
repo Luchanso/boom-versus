@@ -19,6 +19,7 @@ export default class Game extends Phaser.State {
 
     this.addPlayers();
     this.addCursor();
+    this.addAnimationTimer();
   }
 
   update() {
@@ -45,15 +46,11 @@ export default class Game extends Phaser.State {
   }
 
   addPlayers() {
-    let p1 = new Player(this, 50, 50);
-    let p2 = new Player(this.game, this.game.width - 50 - p1.width, 50);
+    this.p1 = new Player(this, 50, 50);
+    this.p2 = new Player(this.game, this.game.width - 50 - this.p1.width, 50);
 
-    p1.addIpulse(10, 10);
-    p1.addIpulse(10, 10);
-    p1.addIpulse(10, 10);
-
-    this.add.existing(p1);
-    this.add.existing(p2);
+    this.add.existing(this.p1);
+    this.add.existing(this.p2);
   }
 
   addCursor() {
@@ -61,4 +58,30 @@ export default class Game extends Phaser.State {
 
     input.activePointer.leftButton.onDown.add(this.handleClick, this);
   }
+
+  addAnimationTimer() {
+    const ANIMATION_DELAY = 1000;
+    let animationTimer = this.time.create(false);
+
+    animationTimer.loop(ANIMATION_DELAY, this.tickTimerAnimation, this);
+    animationTimer.start();
+
+    this.animationTimer = animationTimer;
+
+    return animationTimer;
+  }
+
+  tickTimerAnimation() {
+    const force = 20;
+
+    if (tempFlag) {
+      this.p1.addIpulse(force, force);
+    } else {
+      this.p1.addIpulse(-force, -force);
+    }
+
+    tempFlag = !tempFlag;
+  }
 }
+
+let tempFlag = true;
