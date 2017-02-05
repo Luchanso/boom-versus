@@ -22,24 +22,27 @@ export default class Explosion extends Phaser.Sprite {
 
   animate() {
     const { game } = this;
-    const tweenTime = 250 + game.rnd.between(-50, 200);
+    const timeCreate = 800 + game.rnd.between(-50, 200);
+    const timeWave = 500 + game.rnd.between(-50, 50);
     const maxSize = 400 + game.rnd.between(-100, 100);
+    const createSize = 50;
+    const waveSize = 800;
 
     this.width = 10;
     this.height = 10;
-    this.alpha = 0.1;
+    this.alpha = 0;
 
     game.add.tween(this)
       .to({
-        width: maxSize,
-        height: maxSize,
-        alpha: 0.5,
-      }, tweenTime)
+        width: fisrtSize,
+        height: fisrtSize,
+        alpha: 0.8
+      }, tweenTime, Phaser.Easing.Cubic.Out)
       .to({
-        width: 0,
-        height: 0,
+        width: waveSize,
+        height: waveSize,
         alpha: 0,
-      }, tweenTime)
+      }, timeWave)
       .start()
       .onComplete
       .add(() => {
