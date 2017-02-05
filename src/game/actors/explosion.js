@@ -20,6 +20,13 @@ export default class Explosion extends Phaser.Sprite {
     this.alpha = 0.2;
   }
 
+  reset(x, y) {
+    super.reset(x, y);
+
+    const greenComponent = 175 + this.game.rnd.between(-50, 0);
+    this.tint = Phaser.Color.getColor(255, greenComponent, 87);
+  }
+
   animate() {
     const { game } = this;
     const timeCreate = 800 + game.rnd.between(-50, 200);
@@ -46,7 +53,7 @@ export default class Explosion extends Phaser.Sprite {
       .start()
       .onComplete
       .add(() => {
-        this.destroy();
+        this.kill();
       });
   }
 }
